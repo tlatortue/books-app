@@ -1,7 +1,33 @@
 import React from 'react';
 import { Table, Button } from 'reactstrap';
+import axios from 'axios';
 
 function App() {
+  state = {
+    books: []
+  };
+  componentWillMount() {
+    axios.get('http://localhost:3000/').then((response) => {
+      this.setState({
+        books: response.data
+      });
+    });
+  }
+  render() {
+    let books = this.state.books.map((book) => {
+      return (
+        <tr key={book.id}>
+            <td>{book.id}</td>
+            <td>{book.title}</td>
+            <td>{book.rating}</td>
+            <td>
+              <Button color="success" size="sm" className="mr-1">Edit</Button>
+              <Button color="danger" size="sm" className="mr-1">Delete</Button>
+            </td>
+          </tr>
+      )
+    });
+  }
   return (
     <div className="App container">
       <Table>
@@ -15,15 +41,7 @@ function App() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Book Title</td>
-            <td>2.5</td>
-            <td>
-              <Button color="success" size="sm">Edit</Button>
-              <Button color="danger" size="sm">Delete</Button>
-            </td>
-          </tr>
+          {books}
         </tbody>
       </Table>
     </div>
